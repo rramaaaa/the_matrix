@@ -36,7 +36,7 @@ def outside_venv() -> None:
 
 def inside_status() -> None:
     name = get_name()
-    path = os.environ.get("VIRTUAL_ENV", sys.prefix)
+    path = os.environ.get("VIRTUAL_ENV")
 
     print("MATRIX STATUS: Welcome to the construct")
     print()
