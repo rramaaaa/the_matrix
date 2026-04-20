@@ -51,11 +51,7 @@ def inside_status() -> None:
     print("Package installation path:")
 
     packages_paths = site.getsitepackages()
-    if packages_paths:
-        print(packages_paths[0])
-    else:
-        version = f"{sys.version_info.major}.{sys.version_info.minor}"
-        print(os.path.join(path, "lib", f"python{version}", "site-packages"))
+    print(packages_paths[0])
 
 try:
     if is_virtual_env():
@@ -63,7 +59,5 @@ try:
     else:
         outside_venv()
 
-except KeyboardInterrupt:
-    print("\n\nMission aborted. Stay safe.\n")
 except Exception as e:
-    print(f"\nERROR: Something went wrong - {e}\n")
+    print(f"ERROR: {e}")
