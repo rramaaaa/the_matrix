@@ -53,6 +53,7 @@ def inside_status() -> None:
     packages_paths = site.getsitepackages()
     print(packages_paths[0])
 
+
 try:
     if is_virtual_env():
         inside_status()

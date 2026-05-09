@@ -1,8 +1,7 @@
 import importlib
-import sys
 
 
-def check_package(name: str, message: str) -> None | str:
+def check_package(name: str, message: str) -> None | object:
     try:
         package = importlib.import_module(name)
         version = package.__version__
@@ -13,47 +12,50 @@ def check_package(name: str, message: str) -> None | str:
         return None
 
 
+def check_dependencies() -> int:
+    print("Checking dependencies:")
+    pandas = check_package("pandas", "Data mainpulation ready")
+    numpy = check_package("numpy", "Numerical computation ready")
+    matplotlib = check_package("matplotlib", "Visualization ready")
+
+    if pandas is None or numpy is None or matplotlib is None:
+        print()
+        print("Install with pip:")
+        print("pip install -r requirements.txt")
+        print("Or")
+        print("with Poetry:")
+        print("poetry install")
+        return 0
+    return 1
+
+
 print("LODING STATUS: Loading programs...")
 print()
 
-print("Checking dependencies:")
-pandas = check_package("pandas", "Data mainpulation ready")
-numpy = check_package("numpy", "Numerical computation ready")
-matplotlib = check_package("matplotlib", "Visualization ready")
+checked = check_dependencies()
+if checked:
+    pd = importlib.import_module("pandas")
+    np = importlib.import_module("numpy")
+    plt = importlib.import_module("matplotlib.pyplot")
 
-if pandas is None or numpy is None or matplotlib is None:
-    print("Install with pip:")
-    print("pip install -r requirements.txt")
-    print("\nOr with Poetry:")
-    print("poetry install")
+    data = pd.DataFrame(
+            {
+                "data": np.random.randint(0, 1000, 1000),
+                }
+            )
 
-print("\npip uses requirements.txt")
-print("Poetry uses pyproject.toml and poetry.lock")
+    print()
+    print("Analyzing Matrix data...")
+    print("Processing 1000 data points...")
 
-data = pandas.DataFrame(
-    {
-        "signal": numpy.random.normal(70, 10, 1000),
-        "anomaly": numpy.random.uniform(0, 100, 1000),
-    }
-)
+    print("Generating visualization...")
+    plt.hist(data["data"], bins=20)
+    plt.title("Matrix Data Analysis")
+    plt.xlabel("Random data")
+    plt.ylabel("Random data")
+    plt.savefig("matrix_analysis.png")
+    plt.close()
+    print()
 
-data["risk"] = data["anomaly"] - data["signal"] / 2
-
-print("\nAnalyzing Matrix data...")
-print("Processing 1000 data points...")
-print(f"Average signal: {data['signal'].mean():.2f}")
-print(f"Average anomaly: {data['anomaly'].mean():.2f}")
-print(f"Average risk: {data['risk'].mean():.2f}")
-
-pyplot = importlib.import_module("matplotlib.pyplot")
-
-print("Generating visualization...")
-pyplot.scatter(data["anomaly"], data["risk"])
-pyplot.title("Matrix Data Analysis")
-pyplot.xlabel("Anomaly")
-pyplot.ylabel("Risk")
-pyplot.savefig("matrix_analysis.png")
-pyplot.close()
-
-print("Analysis complete!")
-print("Results saved to: matrix_analysis.png")
+    print("Analysis complete!")
+    print("Results saved to: matrix_analysis.png")
